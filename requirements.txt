@@ -1,0 +1,14 @@
+pandas
+geopandas
+rasterio
+shapely
+scikit-learn
+folium
+matplotlib
+numpy
+psycopg2-binary
+SQLAlchemy
+streamlit
+plotly
+geoalchemy2
+jupyter
