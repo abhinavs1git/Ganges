@@ -72,6 +72,11 @@ streamlit run dashboard/app.py
 3. **Explore Jupyter Notebooks:**
    Launch jupyter lab inside the `notebooks/` directory.
 
+Tableau Visualization
+
+<img width="1362" height="768" alt="image" src="https://github.com/user-attachments/assets/cb2a6e05-1ef7-4670-be27-a255984e0309" />
+
+
 ## 🚀 Future Improvements
 - Integrate **Land Use/Land Cover (LULC)** to evaluate whether urbanization mitigates or exacerbates flood plain overflow.
 - Add real-time Kafka streaming feeds from Central Water Commission (CWC) telemetry sensors.
