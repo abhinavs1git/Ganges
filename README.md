@@ -5,8 +5,6 @@
 ## 📌 Project Overview
 Vast regions of the Ganga basin in **Uttar Pradesh, India** are highly susceptible to cyclic flooding, causing extensive damage to property, agriculture, and life. 
 
-This end-to-end geospatial analysis project is designed for a junior/fresher data analyst portfolio. It generates simulated physical data (river paths, ground heights, and rainfall metrics), constructs a clean data pipeline to store them in a local **SQLite database**, calculates distance metrics, and computes a **Flood Risk Score**. The final output is loaded into an interactive **Tableau Dashboard** for intuitive decision-making.
-
 ---
 
 ## 🎯 Objective
