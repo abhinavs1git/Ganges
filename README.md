@@ -1,6 +1,6 @@
 # 🌊 Ganga Basin Flood Risk Analysis
 
-![Project Banner](https://img.shields.io/badge/Project-Data_Analytics-blue.svg) ![Status](https://img.shields.io/badge/Status-Completed-success.svg) ![Tool-Tableau-orange.svg)
+![Project Banner](https://img.shields.io/badge/Project-Data_Analytics-blue.svg) ![Status](https://img.shields.io/badge/Status-Completed-success.svg)
 
 ## 📌 Project Overview
 
