@@ -1,86 +1,189 @@
-# 🌊 Ganges - Flood Risk Analysis for the Ganga Basin in Uttar Pradesh
+# 🌊 Ganga Basin Flood Risk Analysis
 
-![Project Banner](https://img.shields.io/badge/Project-Geospatial_Data_Science-blue.svg) ![Status](https://img.shields.io/badge/Status-Completed-success.svg) ![Database](https://img.shields.io/badge/Database-SQLite-lightgrey.svg) ![Visualization](https://img.shields.io/badge/Dashboard-Tableau-orange.svg)
+![Project Banner](https://img.shields.io/badge/Project-Data_Analytics-blue.svg) ![Status](https://img.shields.io/badge/Status-Completed-success.svg) ![Tool-Tableau-orange.svg)
 
 ## 📌 Project Overview
-Vast regions of the Ganga basin in **Uttar Pradesh, India** are highly susceptible to cyclic flooding, causing extensive damage to property, agriculture, and life. 
+
+Flooding is a recurring challenge across many regions of the Ganga Basin in Uttar Pradesh, India. This project analyzes flood risk by combining environmental factors and visualizing high-risk areas through an interactive Tableau dashboard.
+
+The goal is to identify locations that may require greater attention during flood seasons and provide a simple, data-driven approach for risk assessment.
 
 ---
 
 ## 🎯 Objective
-Help local authorities identify which high-risk zones to prioritize for flood mitigations and evacuations by combining three main risk factors:
-1. **Low Ground Elevation**: Water naturally pools in low-lying land.
-2. **High Annual Rainfall**: Heavy rains increase overflow probability.
-3. **River Proximity**: Areas closer to major rivers face higher risk.
+
+Determine flood-prone areas using three key factors:
+
+* **Elevation** – Lower elevations are generally more susceptible to flooding.
+* **Rainfall** – Areas receiving higher rainfall face increased flood risk.
+* **Distance from River** – Locations closer to rivers are more vulnerable during overflow events.
 
 ---
 
-## 🏛️ Project Architecture
-The pipeline coordinates data ingestion, local database storage, calculations, and reporting:
+## 📂 Dataset
 
-```mermaid
-graph TD;
-    A[Raw Data Generators] -->|Write raw points/vectors| B[SQLite Database / Raw Files];
-    B -->|Preprocess & Align Coordinates| C(Coordinate Alignment - UTM Zone 44N);
-    C -->|Calculate Metric Distances| D(Spatial Analysis - Distance to Rivers);
-    D -->|Scale variables 0 to 1| E(Flood Risk Scoring Engine);
-    E -->|Write output data| F[Outputs: CSV, GeoJSON, SQLite];
-    F -->|Load dataset| G(Tableau Dashboard);
-    F -->|Run exploration| H(Jupyter Notebook Analysis);
-```
+The project uses CSV files containing:
 
----
+### 1. Elevation Data
 
-## 🗄️ Database Design (SQLite)
-Instead of complex database servers, we use a serverless, file-based **SQLite** database (`database/flood_risk.db`) containing four tables:
-1. **`elevation_data`**: Stores heights (meters) and coordinate points.
-2. **`rainfall_data`**: Stores simulated rain intensities (mm) and coordinates.
-3. **`rivers`**: Stores geometries of rivers (Ganga, Yamuna, Ghaghara) as Well-Known Text (WKT).
-4. **`flood_risk_scores`**: Stores the final computed risk indexes and risk category levels.
+* Location coordinates
+* Elevation (meters)
 
----
+### 2. Rainfall Data
 
-## 🛠️ Methodology & Risk Formula
+* Location coordinates
+* Annual rainfall (mm)
 
-1. **Coordinate Alignment**: We align spatial coordinates to **UTM Zone 44N** (a coordinate reference system using meters instead of degrees) so we can calculate real-world physical distances.
-2. **Distance Analysis**: We measure the exact distance in kilometers from each location to the closest river.
-3. **Risk Scoring Engine**: We normalize rainfall, elevation, and river distance between `0.0` (lowest risk) and `1.0` (highest risk):
-   * Rainfall is scaled directly (higher rainfall = higher risk).
-   * Elevation is inverted (lower elevation = higher risk).
-   * River proximity is inverted (shorter distance = higher risk).
-   
-   The final score is calculated using weighted averages:
-   $$\text{Risk Score (0-100)} = (0.4 \times \text{Rainfall}) + (0.3 \times \text{River Proximity}) + (0.3 \times \text{Low Elevation}) \times 100$$
-   
-4. **Risk Level Buckets**:
-   * **High Risk**: Score $> 66$
-   * **Medium Risk**: Score between $33$ and $66$
-   * **Low Risk**: Score $< 33$
+### 3. River Data
+
+* River coordinates and reference points
+
+### 4. Flood Risk Scores
+
+* Calculated flood risk score
+* Assigned risk category
 
 ---
 
-## 💻 Instructions to Run the Project
+## 🛠️ Methodology
 
-### 1. Install Dependencies
-Ensure you have Python installed, then run:
+### Step 1: Data Preparation
+
+* Load datasets from CSV files
+* Clean and validate records
+* Merge datasets based on location
+
+### Step 2: Distance Calculation
+
+* Calculate the distance between each location and the nearest river point
+
+### Step 3: Risk Scoring
+
+Three factors are normalized on a scale of 0–1:
+
+* Higher rainfall = Higher risk
+* Lower elevation = Higher risk
+* Shorter river distance = Higher risk
+
+### Risk Formula
+
+Risk Score =
+
+(0.4 × Rainfall) +
+(0.3 × River Proximity) +
+(0.3 × Low Elevation)
+
+Final scores are scaled from **0–100**.
+
+### Risk Categories
+
+| Score Range | Risk Level |
+| ----------- | ---------- |
+| 0 – 33      | Low        |
+| 34 – 66     | Medium     |
+| 67 – 100    | High       |
+
+---
+
+## 🚀 How to Run
+
+### Install Requirements
+
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Run the Data Pipeline
-Execute the master coordinator script:
-```bash
-python scripts/run_all.py
-```
-*This automatically initializes the SQLite database, populates the tables, computes spatial distances, applies the modeling formula, and generates the outputs at `/outputs`.*
+### Run Analysis
 
-### 3. Explore Jupyter Notebooks
-Open the notebooks folder to explore interactive geospatial visualizations:
 ```bash
-jupyter notebook notebooks/
+python flood_risk_analysis.py
+```
+
+The script:
+
+* Reads input CSV files
+* Calculates risk scores
+* Generates the final output CSV
+
+Output files are saved in:
+
+```text
+outputs/
 ```
 
 ---
+
+## 📊 Tableau Dashboard
+
+The processed data is visualized in Tableau to support flood-risk assessment.
+
+### Dashboard Features
+
+#### Interactive Risk Map
+
+Displays locations categorized as:
+
+* 🔴 High Risk
+* 🟠 Medium Risk
+* 🟢 Low Risk
+
+#### KPI Cards
+
+Shows:
+
+* Total Locations Analyzed
+* Average Risk Score
+* High-Risk Area Percentage
+
+#### Risk Analysis Visuals
+
+* Risk Score Distribution
+* Rainfall vs Risk Score
+* Distance from River vs Risk Score
+
+---
+
+## 📈 Key Insights
+
+* Locations near rivers consistently show higher flood risk.
+* Low-lying areas become significantly more vulnerable when combined with high rainfall.
+* Risk categorization helps quickly identify priority zones for monitoring and preparedness.
+
+---
+
+## 🧰 Tools Used
+
+* Python
+* Pandas
+* NumPy
+* Tableau
+* CSV Data Processing
+
+---
+
+## 📁 Project Structure
+
+```text
+Ganga-Flood-Risk-Analysis/
+│
+├── data/
+│   ├── elevation_data.csv
+│   ├── rainfall_data.csv
+│   └── river_data.csv
+│
+├── outputs/
+│   └── flood_risk_scores.csv
+│
+├── dashboard/
+│   └── tableau_dashboard.twb
+│
+├── notebooks/
+│   └── analysis.ipynb
+│
+├── flood_risk_analysis.py
+├── requirements.txt
+└── README.md
+```
 
 ## 📊 Tableau Dashboard Visualization
 Rather than hosting custom web code, we use **Tableau Community / Public Version** to present findings, making this project highly suitable for business intelligence roles. 
@@ -97,3 +200,4 @@ Rather than hosting custom web code, we use **Tableau Community / Public Version
 ## 💡 Key Insights
 * **Elevation Structuring**: Proximity to water is a key risk factor, but ground elevation plays a massive role. Points close to a river on high ground might be safer than deep basins miles away.
 * **Actionable Priorities**: By bucketing scores into High, Medium, and Low risk, regional disaster management teams can instantly pinpoint hot-spot zones for reinforcements.
+---
